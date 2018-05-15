@@ -1,19 +1,100 @@
 #include <iostream>
+#include <unistd.h>
+long int i = 1;
 struct point { // список с данными точками
-    int x;
-    int y;
+    long int x;
+    long int y;
+    long int z;
     point * next;
 };
-struct vector { // структура для удобного хранения векторов
-    int x;
-    int y;
+struct vector { // структура для удобного хранения векторов и точек
+    long int x;
+    long int y;
+    long int z;
 };
 point * head; // указатель на начало списка
 point * first; // точка из списка; используется для обхода списка; всегда находится левее second и third
 point * second; // точка из списка; используется для обхода списка; всегда находится левее third и правее first
 point * third; // точка из списка; используется для обхода списка; всегда находится левее second и first
+long int Sign (long int number) {
+    if (number > 0) {
+        return 1;
+    }
+    else {
+        if (number < 0) {
+            return -1;
+        }
+        else {
+            return 0;
+        }
+    }
+}
 void test() { // проверяет можно ли построить плоскость на точках first, second и third; если можно: проверяет лежат ли точки, отличные от first, second и third по одну сторону от плоскости
+    point * go = head;
+    vector v1;
+    vector v2;
+    vector point;
+    bool end = false;
+    bool ok = true;
+    long int sign = 2;
+    long int A, B, C, D;
+    point.x = first->x;
+    point.y = first->y;
+    point.z = first->z;
+    v1.x = third->x - first->x;
+    v1.y = third->y - first->y;
+    v1.z = third->z - first->z;
+    v2.x = second->x - first->x;
+    v2.y = second->y - first->y;
+    v2.z = second->z - first->z;
+    if ((v1.x * v2.y == v1.y * v2.x) && (v1.y * v2.z == v1.z * v2.y) && (v1.x * v2.z == v1.z * v2.x)) { // line
 
+    }
+    else { // ploskost
+        A = v2.y * v1.z - v1.y * v2.z;
+        B = v2.z * v1.x - v1.z * v2.x;
+        C = v2.x * v1.y - v1.x * v2.y;
+        D = point.x * v1.y * v2.z - point.x * v2.y * v1.z - point.y * v1.x * v2.z + point.y * v2.x * v1.z + point.z * v1.x * v2.y - point.z * v2.x * v1.y;
+     //   printf("\nbefore 1 while\n");
+        while (go == first || go == second || go == third || sign == 2){
+            if (go == first || go == second || go == third){
+      //          printf("\ngo =f = s =t\n");
+                go = go->next;
+            }
+            else {
+        //        printf("\nelse go=f=s=t\n");
+                if (A * go->x + B * go->y + C * go->z + D == 0) {
+                    sign = Sign(A * go->x + B * go->y + C * go->z + D);
+                    ok = false;
+        //            printf("\nok=false\n");
+                }
+                else {
+         //           printf("\nelse ok=false\n");
+                    sign = Sign(A * go->x + B * go->y + C * go->z + D);
+                }
+            }
+            if (sign != 2) {
+           //     printf("\nbreak\n");
+                break;
+            }
+        }
+    //    printf("\nbefore 2 while\n");
+        while (end == false && ok == true) {
+            if ((go != first) && (go != second) && (go != third)) {
+                if (Sign(A * go->x + B * go->y + C * go->z + D) != sign) {
+                    ok = false;
+                }
+            }
+            if (go->next == NULL) { //
+                end = true;  // да
+            }
+            else go = go->next; // нет
+        }
+        if (ok == true){
+            printf("%li: (%li, %li, %li) (%li, %li, %li) (%li, %li, %li)\n",i,first->x,first->y,first->z,second->x,second->y,second->z,third->x,third->y,third->z);
+            i++;
+        }
+    }
 }
 /* struct point2 {
     point * first;
@@ -26,15 +107,15 @@ int main() { // обход: first всегда левее second и third, ме�
     bool end_second = false; // когда second - предпоследняя точка в списке - меняет значение, чтобы сместить third вправо
     bool end_first = false; // когда first в списке вторая с конца - меняет значение, чтобы закончить проверки, так как программа обошла все комбинации точек
     FILE * input;
-    input = fopen("         ","r");
+    input = fopen("C:\\Users\\199930\\CLionProjects\\point\\points.txt","r");
     point * main = new point;
-    fscanf(input,"%i %i",&main->x,&main->y); // сканирование координаты первой точки
+    fscanf(input,"%li %li %li",&main->x,&main->y,&main->z); // сканирование координаты первой точки
     head = main; // указатель на начало списка
     main->next = NULL;
     while (feof(input) == false) { // сканирование координат всех точек
         main->next = new point;
         main = main->next;
-        fscanf(input,"%i %i",&main->x,&main->y);
+        fscanf(input,"%li %li %li",&main->x,&main->y,&main->z);
         main->next = NULL;
     }
     fclose(input);
@@ -45,6 +126,7 @@ int main() { // обход: first всегда левее second и third, ме�
         while (end_second == false) {
             while(end_third == false) {
                 test();
+    //            printf("\ntest\n");
                 if (third->next == NULL) { // является ли точка third последней точкой списка?
                     end_third = true;  // да
                 }
