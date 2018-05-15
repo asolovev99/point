@@ -4,7 +4,7 @@ struct point { // список с данными точками
     int y;
     point * next;
 };
-struct vector { // вектор
+struct vector { // структура для удобного хранения векторов
     int x;
     int y;
 };
@@ -28,42 +28,42 @@ int main() { // обход: first всегда левее second и third, ме�
     FILE * input;
     input = fopen("         ","r");
     point * main = new point;
-    fscanf(input,"%i %i",&main->x,&main->y);
+    fscanf(input,"%i %i",&main->x,&main->y); // сканирование координаты первой точки
     head = main; // указатель на начало списка
     main->next = NULL;
-    while (feof(input) == false) {
+    while (feof(input) == false) { // сканирование координат всех точек
         main->next = new point;
         main = main->next;
         fscanf(input,"%i %i",&main->x,&main->y);
         main->next = NULL;
     }
     fclose(input);
-    first = head;
-    second = first->next;
-    third = second->next;
+    first = head; // first - первая точка в списке
+    second = first->next; // second - вторая точка в списке
+    third = second->next; // third - третья точка в списке
     while (end_first == false) {
         while (end_second == false) {
             while(end_third == false) {
                 test();
-                if (third->next == NULL) {
-                    end_third = true;
+                if (third->next == NULL) { // является ли точка third последней точкой списка?
+                    end_third = true;  // да
                 }
-                else third = third->next;
+                else third = third->next; // нет
             }
             end_third = false;
-            if (second->next->next == NULL) {
-                end_second = true;
+            if (second->next->next == NULL) {  // является ли точка second предпоследней точкой списка?
+                end_second = true; // да
             }
-            else {
+            else { // нет
                 second = second->next;
                 third = second->next;
             }
         }
         end_second = false;
-        if (first->next->next->next == NULL) {
-            end_first = true;
+        if (first->next->next->next == NULL) {  // является ли точка first второй с конца точкой списка?
+            end_first = true; // да
         }
-        else {
+        else { // нет
             first = first->next;
             second = first->next;
             third = second->next;
