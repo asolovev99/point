@@ -16,7 +16,7 @@ point * head; // указатель на начало списка
 point * first; // точка из списка; используется для обхода списка; всегда находится левее second и third
 point * second; // точка из списка; используется для обхода списка; всегда находится левее third и правее first
 point * third; // точка из списка; используется для обхода списка; всегда находится левее second и first
-long int Sign (long int number) {
+long int Sign (long int number) { // знак
     if (number > 0) {
         return 1;
     }
@@ -37,7 +37,7 @@ void test() { // проверяет можно ли построить плос�
     bool end = false;
     bool ok = true;
     long int sign = 2;
-    long int A, B, C, D;
+    long int A, B, C, D; // коэффиценты
     point.x = first->x;
     point.y = first->y;
     point.z = first->z;
@@ -47,50 +47,50 @@ void test() { // проверяет можно ли построить плос�
     v2.x = second->x - first->x;
     v2.y = second->y - first->y;
     v2.z = second->z - first->z;
-    if ((v1.x * v2.y == v1.y * v2.x) && (v1.y * v2.z == v1.z * v2.y) && (v1.x * v2.z == v1.z * v2.x)) { // line
+    if ((v1.x * v2.y == v1.y * v2.x) && (v1.y * v2.z == v1.z * v2.y) && (v1.x * v2.z == v1.z * v2.x)) { // прямая
 
     }
-    else { // ploskost
+    else { // плоскость
         A = v2.y * v1.z - v1.y * v2.z;
         B = v2.z * v1.x - v1.z * v2.x;
         C = v2.x * v1.y - v1.x * v2.y;
         D = point.x * v1.y * v2.z - point.x * v2.y * v1.z - point.y * v1.x * v2.z + point.y * v2.x * v1.z + point.z * v1.x * v2.y - point.z * v2.x * v1.y;
      //   printf("\nbefore 1 while\n");
-        while (go == first || go == second || go == third || sign == 2){
-            if (go == first || go == second || go == third){
+        while (go == first || go == second || go == third || sign == 2){ // знак первой возможной точки
+            if (go == first || go == second || go == third){ // если точка =first second third
       //          printf("\ngo =f = s =t\n");
                 go = go->next;
             }
-            else {
+            else {  // если точка !=first second third
         //        printf("\nelse go=f=s=t\n");
-                if (A * go->x + B * go->y + C * go->z + D == 0) {
+                if (A * go->x + B * go->y + C * go->z + D == 0) { // точка принадлежит плоскости
                     sign = Sign(A * go->x + B * go->y + C * go->z + D);
                     ok = false;
         //            printf("\nok=false\n");
                 }
-                else {
+                else { // точка не принадлежит плоскости
          //           printf("\nelse ok=false\n");
                     sign = Sign(A * go->x + B * go->y + C * go->z + D);
                 }
             }
-            if (sign != 2) {
+            if (sign != 2 || ok == false) { // либо нашли точку, либо одна точка лежит в плоскости
            //     printf("\nbreak\n");
                 break;
             }
         }
     //    printf("\nbefore 2 while\n");
-        while (end == false && ok == true) {
+        while (end == false && ok == true) { // не последняя точка и пока выполнены условия
             if ((go != first) && (go != second) && (go != third)) {
-                if (Sign(A * go->x + B * go->y + C * go->z + D) != sign) {
+                if (Sign(A * go->x + B * go->y + C * go->z + D) != sign) { // 1 точка лежит на другой стороне
                     ok = false;
                 }
             }
-            if (go->next == NULL) { //
+            if (go->next == NULL) { // закончились точки на проверку?
                 end = true;  // да
             }
             else go = go->next; // нет
         }
-        if (ok == true){
+        if (ok == true){ // всё хорошо
             printf("%li: (%li, %li, %li) (%li, %li, %li) (%li, %li, %li)\n",i,first->x,first->y,first->z,second->x,second->y,second->z,third->x,third->y,third->z);
             i++;
         }
