@@ -1,5 +1,4 @@
 #include <iostream>
-#include <unistd.h>
 long int i = 1;
 struct point { // список с данными точками
     long int x;
@@ -146,5 +145,6 @@ int main() { // обход: first всегда левее second и third, ме�
             third = second->next;
         }
     }
+
     return 0;
 }
